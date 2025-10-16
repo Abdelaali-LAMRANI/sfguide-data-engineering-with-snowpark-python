@@ -6,6 +6,7 @@
 #------------------------------------------------------------------------------
 
 import time,os
+from dotenv import load_dotenv
 from snowflake.snowpark import Session
 #import snowflake.snowpark.types as T
 #import snowflake.snowpark.functions as F
@@ -70,12 +71,12 @@ def validate_raw_tables(session):
 # For local debugging
 if __name__ == "__main__":
     connection_parameters = {
-        "account": os.environ["SNOWFLAKE_ACCOUNT"],
-        "user": os.environ["SNOWFLAKE_USER"],
-        "password": os.environ["SNOWFLAKE_PASSWORD"],
-        "role": os.environ.get("SNOWFLAKE_ROLE", "HOL_ROLE"),
-        "warehouse": os.environ.get("SNOWFLAKE_WAREHOUSE", "HOL_WH"),
-        "database": os.environ.get("SNOWFLAKE_DATABASE", "HOL_DB")
+        "account": os.getenv("SNOWFLAKE_ACCOUNT"),
+        "user": os.getenv("SNOWFLAKE_USER"),
+        "password": os.getenv("SNOWFLAKE_PASSWORD"),
+        "role": os.getenv("SNOWFLAKE_ROLE"),
+        "warehouse": os.getenv("SNOWFLAKE_WAREHOUSE"),
+        "database": os.getenv("SNOWFLAKE_DATABASE"),
     }
     with Session.builder.configs(connection_parameters).create() as session:
         load_all_raw_tables(session)
