@@ -13,6 +13,8 @@
 from snowflake.snowpark import Session
 #import snowflake.snowpark.types as T
 import snowflake.snowpark.functions as F
+from dotenv import load_dotenv
+import os
 
 
 def create_pos_view(session):
@@ -106,8 +108,15 @@ def test_pos_view(session):
 
 # For local debugging
 if __name__ == "__main__":
-    # Create a local Snowpark session
-    with Session.builder.getOrCreate() as session:
+    connection_parameters = {
+        "account": os.getenv("SNOWFLAKE_ACCOUNT"),
+        "user": os.getenv("SNOWFLAKE_USER"),
+        "password": os.getenv("SNOWFLAKE_PASSWORD"),
+        "role": os.getenv("SNOWFLAKE_ROLE"),
+        "warehouse": os.getenv("SNOWFLAKE_WAREHOUSE"),
+        "database": os.getenv("SNOWFLAKE_DATABASE"),
+    }
+    with Session.builder.configs(connection_parameters).create() as session:
         create_pos_view(session)
         create_pos_view_stream(session)
 #        test_pos_view(session)
